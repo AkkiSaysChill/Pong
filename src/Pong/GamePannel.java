@@ -16,6 +16,7 @@ public class GamePannel extends JPanel implements Runnable{
     Thread gameThread;
     Image image;
     Graphics graphics;
+    Random random;
     Paddle paddle1;
     Paddle paddle2;
     Ball ball;
@@ -34,7 +35,8 @@ public class GamePannel extends JPanel implements Runnable{
     }
 
     public void newBall(){
-
+        //random = new Random();
+        ball = new Ball((GAME_WIDTH/2)-(BALL_DIAMETER/2), (GAME_HEIGHT/2)-(BALL_DIAMETER/2), BALL_DIAMETER, BALL_DIAMETER);
     }
 
     public  void newPaddles(){
@@ -52,11 +54,13 @@ public class GamePannel extends JPanel implements Runnable{
     public void draw(Graphics g){
         paddle1.draw(g);
         paddle2.draw(g);
+        ball.draw(g);
     }
 
     public void move(){
          paddle1.move();
          paddle2.move();
+         ball.move();
     }
 
     public void checkCollision(){
@@ -74,6 +78,18 @@ public class GamePannel extends JPanel implements Runnable{
         if (paddle2.y >= (GAME_HEIGHT-PADDLE_HEIGHT)){
             paddle2.y = (GAME_HEIGHT-PADDLE_HEIGHT);
         }
+
+        // ball bounce
+        if (ball.y <= 0){
+            ball.setYdir(-ball.yVelocity);
+        }
+        if (ball.y >= (GAME_HEIGHT-BALL_DIAMETER)){
+            ball.setYdir(-ball.yVelocity);
+        }
+        if (ball.intersects(paddle1)){
+            ball.xVelocity = Math.abs(ball.xVelocity); // to be continued
+        }
+
     }
 
     public void run(){
