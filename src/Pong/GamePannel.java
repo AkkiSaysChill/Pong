@@ -55,7 +55,8 @@ public class GamePannel extends JPanel implements Runnable{
     }
 
     public void move(){
-         // paddle1.move(); // help me 😥
+         paddle1.move();
+         paddle2.move();
     }
 
     public void checkCollision(){
@@ -81,7 +82,8 @@ public class GamePannel extends JPanel implements Runnable{
         double amountOfTicks = 60.0;
         double ns = 1000000000 / amountOfTicks;
         double delta = 0;
-        while (true){
+        boolean running = true;
+        while (running){
             long now = System.nanoTime();
             delta += (now - lastTime)/ns;
             if (delta >= 1){
@@ -90,6 +92,12 @@ public class GamePannel extends JPanel implements Runnable{
                 repaint();
                 delta--;
             }
+            try {
+                Thread.sleep(10); // Sleep to reduce CPU usage
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
         }
     }
 
