@@ -35,8 +35,8 @@ public class GamePannel extends JPanel implements Runnable{
     }
 
     public void newBall(){
-        //random = new Random();
-        ball = new Ball((GAME_WIDTH/2)-(BALL_DIAMETER/2), (GAME_HEIGHT/2)-(BALL_DIAMETER/2), BALL_DIAMETER, BALL_DIAMETER);
+        random = new Random();
+        ball = new Ball((GAME_WIDTH/2)-(BALL_DIAMETER/2), random.nextInt(GAME_HEIGHT-BALL_DIAMETER), BALL_DIAMETER, BALL_DIAMETER);
     }
 
     public  void newPaddles(){
@@ -55,6 +55,7 @@ public class GamePannel extends JPanel implements Runnable{
         paddle1.draw(g);
         paddle2.draw(g);
         ball.draw(g);
+        score.draw(g);
     }
 
     public void move(){
@@ -87,9 +88,53 @@ public class GamePannel extends JPanel implements Runnable{
             ball.setYdir(-ball.yVelocity);
         }
         if (ball.intersects(paddle1)){
-            ball.xVelocity = Math.abs(ball.xVelocity); // to be continued
+            ball.xVelocity = Math.abs(ball.xVelocity);
+            if (ball.xVelocity >= 6){
+                ball.xVelocity = 3;
+            }else {
+                ball.xVelocity++;
+            }
+            if (ball.yVelocity > 0){
+                ball.yVelocity++;
+
+            }else {
+                ball.yVelocity--;
+            }
+            ball.setXdir(ball.xVelocity);
+            ball.setYdir(ball.yVelocity);
         }
 
+        if (ball.intersects(paddle2)){
+            ball.xVelocity = Math.abs(ball.xVelocity);
+            if (ball.xVelocity >= 6){
+                ball.xVelocity = 3;
+            }else {
+                ball.xVelocity++;
+            }
+            if (ball.yVelocity > 0){
+                ball.yVelocity++;
+
+            }else {
+                ball.yVelocity--;
+            }
+            ball.setXdir(-ball.xVelocity);
+            ball.setYdir(ball.yVelocity);
+        }
+
+        // give player points
+        if (ball.x <= 0){
+            score.player2++;
+            newPaddles();
+            newBall();
+            System.out.println("2: "+score.player2);
+        }
+
+        if (ball.x >= GAME_WIDTH-BALL_DIAMETER){
+            score.player1++;
+            newPaddles();
+            newBall();
+            System.out.println("1: "+score.player1);
+        }
     }
 
     public void run(){
